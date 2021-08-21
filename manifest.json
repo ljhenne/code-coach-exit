@@ -1,0 +1,20 @@
+{
+  "manifest_version": 2,
+  "name": "Code Coach",
+  "version": "1.0",
+
+  "description": "Helps track code problem attempts.",
+
+  "icons": {
+    "48": "icons/cool-monkey-48.png",
+    "96": "icons/cool-monkey-96.png"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://*.leetcode.com/*"],
+      "js": ["code-coach.js"]
+    }
+  ]
+
+}
