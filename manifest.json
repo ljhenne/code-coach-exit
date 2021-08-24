@@ -5,14 +5,30 @@
 
   "description": "Helps track code problem attempts.",
 
+  "permissions": ["storage", "tabs"],
+
   "icons": {
     "48": "icons/cool-monkey-48.png",
     "96": "icons/cool-monkey-96.png"
   },
 
+  "background": {
+    "scripts": ["background-script.js", "vendor/easytimer.min.js"]
+  },
+
+  "page_action": {
+    "default_icon": {
+      "16": "icons/cool-monkey-16.png",
+      "32": "icons/cool-monkey-32.png"
+    },
+    "default_popup": "popup/index.html",
+    "default_title": "Code Coach",
+    "show_matches": ["*://leetcode.com/problems/*"]
+  },
+
   "content_scripts": [
     {
-      "matches": ["*://*.leetcode.com/problems/*"],
+      "matches": ["*://leetcode.com/problems/*"],
       "js": ["code-coach.js"]
     }
   ]
