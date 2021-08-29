@@ -3,58 +3,44 @@ let ports = [];
 let timers = {};
 
 browser.runtime.onConnect.addListener((port) => {
+    let url = port.name.replace(/^content\+\+|popup\+\+/g, "");
+    console.log(`URL: ${url}`);
     ports[port.name] = port;
     if (port.name.includes("content++")) {
+        console.log("Got a message from a content script");
         console.log(`Stored connection for ${port.name}`);
         port.onMessage.addListener((message) => {
             if (message.event === "pageLoad") {
                 console.log(`Starting timer at ${Date.now()}`);
-                timers[port.name] = new easytimer.Timer();
-                timers[port.name].start()
-                console.log(`Time elapsed: ${timers[port.name].getTimeValues().toString()}`)
+                timers[url] = new easytimer.Timer();
+                timers[url].start()
+                console.log(`Time elapsed: ${timers[url].getTimeValues().toString()}`)
             }
         });
     } else {  // port.name.includes("popup++")
-        console.log("Got a message from the popup")
-        port.postMessage({timeValues: timers["content++https://leetcode.com/problems/longest-palindromic-substring/"].getTimeValues()});
-
+        console.log("Got a message from a popup");
+        console.log(`Stored connection for ${port.name}`);
+        port.onMessage.addListener((message) => {
+            if (message.event === "popupOpened") {
+                console.log("Popup was opened");
+                port.postMessage({timeValues: timers[url].getTimeValues(), startIt: true});
+            } else if (message.event === "pause") {
+                console.log("Pausing the timer");
+                timers[url].pause();
+                port.postMessage({timeValues: timers[url].getTimeValues(), startIt: false});
+            } else if (message.event === "play") {
+                timers[url].start();
+                console.log("Playing the timer");
+                port.postMessage({timeValues: timers[url].getTimeValues(), startIt: true});
+            } else if (message.event === "stop") {
+                timers[url].stop();
+                console.log("Stopping the timer");
+                port.postMessage({timeValues: timers[url].getTimeValues(), startIt: false});
+            } else if (message.event === "reset") {
+                timers[url].reset();
+                console.log("Resetting the timer");
+                port.postMessage({timeValues: timers[url].getTimeValues(), startIt: true});
+            }
+        })
     }
-
 });
-
-
-
-// background-script.js
-
-// let ports = []
-//
-// function connected(p) {
-//     ports[p.sender.tab.id] = p
-//     //...
-// }
-//
-// browser.runtime.onConnect.addListener(connected)
-//
-// browser.browserAction.onClicked.addListener(function() {
-//     ports.forEach( p => {
-//         p.postMessage({greeting: "they clicked the button!"})
-//     })
-// });
-
-// background-script.js
-//
-// let portFromCS;
-//
-// function connected(p) {
-//     portFromCS = p;
-//     portFromCS.postMessage({greeting: "hi there content script!"});
-//     portFromCS.onMessage.addListener(function(m) {
-//         portFromCS.postMessage({greeting: "In background script, received message from content script:" + m.greeting});
-//     });
-// }
-//
-// browser.runtime.onConnect.addListener(connected);
-//
-// browser.browserAction.onClicked.addListener(function() {
-//     portFromCS.postMessage({greeting: "they clicked the button!"});
-// });
