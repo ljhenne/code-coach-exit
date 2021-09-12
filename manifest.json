@@ -5,7 +5,7 @@
 
   "description": "Helps track code problem attempts.",
 
-  "permissions": ["storage", "tabs"],
+  "permissions": ["*://127.0.0.1/*","storage", "tabs"],
 
   "icons": {
     "48": "icons/cool-monkey-48.png",
@@ -13,7 +13,7 @@
   },
 
   "background": {
-    "scripts": ["background-script.js", "vendor/easytimer.min.js"]
+    "scripts": ["background-script.js", "vendor/easytimer.min.js", "vendor/axios.min.js"]
   },
 
   "page_action": {
