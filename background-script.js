@@ -66,6 +66,14 @@ browser.runtime.onConnect.addListener((port) => {
                 timers[url].pause();
                 port.postMessage({timeValues: timers[url].getTimeValues(), startIt: false});
             } else if (message.event === "play") {
+                if (timers[url].getTimeValues() === 0) {
+                    submitEvent({
+                        questionName: message.questionName,
+                        questionUrl: message.questionUrl,
+                        type: "start",
+                        user: message.user
+                    });
+                }
                 timers[url].start();
                 console.log("Playing the timer");
                 port.postMessage({timeValues: timers[url].getTimeValues(), startIt: true});
@@ -73,6 +81,12 @@ browser.runtime.onConnect.addListener((port) => {
                 timers[url].stop();
                 console.log("Stopping the timer");
                 port.postMessage({timeValues: timers[url].getTimeValues(), startIt: false});
+                submitEvent({
+                    questionName: message.questionName,
+                    questionUrl: message.questionUrl,
+                    type: "stop",
+                    user: message.user
+                });
             } else if (message.event === "reset") {
                 timers[url].reset();
                 console.log("Resetting the timer");

@@ -1,8 +1,19 @@
 let backgroundConnection;
 let timer;
 
+function formatTitle(title) {
+   if (title.includes("LeetCode")) {
+       let titleParts = title.split(" ");
+       return titleParts.slice(0, titleParts.length - 2).join(" ");
+   }
+}
+
 browser.tabs.query({active: true, currentWindow: true}).then((tabs) => {
-    backgroundConnection = browser.runtime.connect({name: `popup++${tabs[0].url}`});
+    let questionUrl = tabs[0].url;
+    let questionTitle = formatTitle(tabs[0].title);
+    backgroundConnection = browser.runtime.connect({name: `popup++${questionUrl}`});
+    document.getElementById("question-title").innerText = questionTitle;
+
     backgroundConnection.onMessage.addListener((response) => {
         console.log(response);
         timer = new easytimer.Timer({startValues: response.timeValues});
@@ -20,11 +31,11 @@ browser.tabs.query({active: true, currentWindow: true}).then((tabs) => {
 
 let playPauseElement = document.getElementById("play-pause");
 playPauseElement.addEventListener("click", (ev) => {
-    if (playPauseElement.innerText === "Play") {
-        playPauseElement.innerText = "Pause";
+    if (playPauseElement.innerHTML === "<i class=\"fas fa-play\"></i>") {
+        playPauseElement.innerHTML = "<i class=\"fas fa-pause\"></i>";
         backgroundConnection.postMessage({event: "play"});
     } else {
-        playPauseElement.innerText = "Play";
+        playPauseElement.innerHTML = "<i class=\"fas fa-play\"></i>";
         backgroundConnection.postMessage({event: "pause"});
     }
 });

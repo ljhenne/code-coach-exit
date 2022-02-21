@@ -30,3 +30,5 @@ function waitForQuestionTitle() {
 }
 
 waitForQuestionTitle();
+
+// Here need to implement listeners for test, success, fail, and abandon

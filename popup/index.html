@@ -3,13 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="vendor/fontawesome-free-5.15.4-web/css/all.css" rel="stylesheet">
 </head>
 <body>
+    <div id="question-title"></div>
     <div id="stopwatch">Loading...</div>
-    <div>
-        <div id="play-pause">Pause</div>
-        <div id="stop">Stop</div>
-        <div id="reset">Reset</div>
+    <div class="table">
+        <ul id="stopwatch-controls">
+            <li id="play-pause"><i class="fas fa-pause"></i></li>
+            <li id="stop"><i class="fas fa-stop"></i></li>
+            <li id="reset"><i class="fas fa-undo"></i></li>
+        </ul>
     </div>
     <script src="script.js"></script>
     <script src="easytimer.min.js"></script>

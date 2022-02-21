@@ -1,0 +1,16 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+.table {
+    display: table;   /* Allow the centering to work */
+    margin: 0 auto;
+}
+
+ul#stopwatch-controls {
+    text-align: center;
+}
+ul#stopwatch-controls li {
+    display: inline-block;
+}
